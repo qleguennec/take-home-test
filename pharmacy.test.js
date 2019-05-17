@@ -183,5 +183,35 @@ describe("Pharmacy", () => {
         ).toBe(0);
       });
     });
+
+    describe("Dafalgan", () => {
+      it("should decrement the expiresIn", () => {
+        expect(
+          new Pharmacy([new Drug("Dafalgan", 2, 3)]).updateBenefitValue()[0]
+            .expiresIn
+        ).toEqual(1);
+      });
+
+      it("should decrement the benefit by 2", () => {
+        expect(
+          new Pharmacy([new Drug("Dafalgan", 2, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(3);
+      });
+
+      it("should decrement the benefit by 4 when the expiresIn is equal to 0", () => {
+        expect(
+          new Pharmacy([new Drug("Dafalgan", 0, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(1);
+      });
+
+      it("should decrement the benefit by 4 when the expiresIn is less than 0", () => {
+        expect(
+          new Pharmacy([new Drug("Dafalgan", -1, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(1);
+      });
+    });
   });
 });

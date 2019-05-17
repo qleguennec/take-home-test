@@ -102,5 +102,21 @@ describe("Pharmacy", () => {
         ).toEqual(1);
       });
     });
+
+    describe("Magic Pill", () => {
+      it("should not change the benefit", () => {
+        expect(
+          new Pharmacy([new Drug("Magic Pill", 2, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(5);
+      });
+
+      it("should not change the expiresIn", () => {
+        expect(
+          new Pharmacy([new Drug("Magic Pill", 2, 3)]).updateBenefitValue()[0]
+            .expiresIn
+        ).toEqual(2);
+      });
+    });
   });
 });

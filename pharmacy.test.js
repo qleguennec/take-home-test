@@ -12,10 +12,16 @@ describe("Pharmacy", () => {
         });
     });
 
-    it("should decrease the benefit and expiresIn", () => {
+    it("should decrement the benefit", () => {
       expect(
-        new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()
-      ).toEqual([new Drug("test", 1, 2)]);
+        new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()[0].benefit
+      ).toEqual(2);
+    });
+
+    it("should decrement the expiresIn", () => {
+      expect(
+        new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()[0].expiresIn
+      ).toEqual(1);
     });
   });
 });

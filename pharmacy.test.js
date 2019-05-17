@@ -118,5 +118,70 @@ describe("Pharmacy", () => {
         ).toEqual(2);
       });
     });
+
+    describe("Fervex", () => {
+      it("should decrement the expiresIn", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 2, 3)]).updateBenefitValue()[0]
+            .expiresIn
+        ).toEqual(1);
+      });
+
+      it("should not increment the benefit to a value greater than 50", () => {
+        expect(
+          new Pharmacy([new Drug("Herbal Tea", 0, 50)]).updateBenefitValue()[0]
+            .benefit
+        ).toBeLessThanOrEqual(50);
+      });
+
+      it("should increment the benefit when the expiresIn is greater than 10", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 11, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(6);
+      });
+
+      it("should increment the benefit by 2 when the expiresIn is equal to 10", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 10, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(7);
+      });
+
+      it("should increment the benefit by 2 when the expiresIn is less than 10", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 9, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(7);
+      });
+
+      it("should increment the benefit by 3 when the expiresIn is equal to 5", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 5, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(8);
+      });
+
+      it("should increment the benefit by 3 when the expiresIn is less than 5", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 4, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(8);
+      });
+
+      it("should reset the benefit to 0 when the expiresIn is equal to 0", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", 0, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(0);
+      });
+
+      it("should reset the benefit to 0 when the expiresIn is less than 0", () => {
+        expect(
+          new Pharmacy([new Drug("Fervex", -1, 5)]).updateBenefitValue()[0]
+            .benefit
+        ).toBe(0);
+      });
+    });
   });
 });

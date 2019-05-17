@@ -34,12 +34,36 @@ describe("Pharmacy", () => {
       ).toEqual(1);
     });
 
-    it("should side-effect deincrement the expiresIn and benefit", () => {
+    it("should side-effect decrement the expiresIn and benefit", () => {
       const pharmacy = new Pharmacy([new Drug("test", 2, 3)]);
       pharmacy.updateBenefitValue();
 
       expect(pharmacy.drugs[0].expiresIn).toBe(1);
       expect(pharmacy.drugs[0].benefit).toBe(2);
+    });
+
+    it("should decrement the benefit by 2 when the expiresIn is equal to 0", () => {
+      expect(
+        new Pharmacy([new Drug("test", 0, 2)]).updateBenefitValue()[0].benefit
+      ).toEqual(0);
+    });
+
+    it("should decrement the benefit by 2 when the expiresIn is less than 0", () => {
+      expect(
+        new Pharmacy([new Drug("test", -1, 2)]).updateBenefitValue()[0].benefit
+      ).toEqual(0);
+    });
+
+    it("should not decrement the benefit to a negative value", () => {
+      expect(
+        new Pharmacy([new Drug("test", 0, 0)]).updateBenefitValue()[0].benefit
+      ).toBeGreaterThanOrEqual(0);
+    });
+
+    it("should not increment the benefit to a value greater than 50", () => {
+      expect(
+        new Pharmacy([new Drug("test", 0, 50)]).updateBenefitValue()[0].benefit
+      ).toBeLessThanOrEqual(50);
     });
   });
 });

@@ -1,3 +1,38 @@
+const drugUpdateRules = {
+  "Herbal Tea": ({ expiresIn }) => ({
+    expiresIn: -1,
+    benefit: expiresIn > 0 ? 1 : 2
+  }),
+  "Magic Pill": () => ({}),
+  Fervex: ({ expiresIn, benefit }) => {
+    if (expiresIn <= 0) return { expiresIn: -1, benefit: -benefit };
+    else if (expiresIn <= 5) return { expiresIn: -1, benefit: 3 };
+    else if (expiresIn <= 10) return { expiresIn: -1, benefit: 2 };
+    else return { expiresIn: -1, benefit: 1 };
+  }
+};
+
+const drugUpdateDefaultRule = ({ expiresIn }) => ({
+  expiresIn: -1,
+  benefit: -(expiresIn > 0 ? 1 : 2)
+});
+
+const fixBenefitBounds = benefit => {
+  if (benefit > 50) return 50;
+  else if (benefit < 0) return 0;
+  else return benefit;
+};
+
+const updateDrugEndOfDay = drug => {
+  const delta = (drugUpdateRules[drug.name] || drugUpdateDefaultRule)(drug);
+
+  return {
+    ...drug,
+    expiresIn: drug.expiresIn + (delta.expiresIn || 0),
+    benefit: fixBenefitBounds(drug.benefit + (delta.benefit || 0))
+  };
+};
+
 export class Drug {
   constructor(name, expiresIn, benefit) {
     this.name = name;
@@ -10,52 +45,9 @@ export class Pharmacy {
   constructor(drugs = []) {
     this.drugs = drugs;
   }
+
   updateBenefitValue() {
-    this.drugs.forEach(drug => {
-      if (drug.name != "Herbal Tea" && drug.name != "Fervex") {
-        if (drug.benefit > 0) {
-          if (drug.name != "Magic Pill") {
-            drug.benefit = drug.benefit - 1;
-          }
-        }
-      } else {
-        if (drug.benefit < 50) {
-          drug.benefit = drug.benefit + 1;
-          if (drug.name == "Fervex") {
-            if (drug.expiresIn < 11) {
-              if (drug.benefit < 50) {
-                drug.benefit = drug.benefit + 1;
-              }
-            }
-            if (drug.expiresIn < 6) {
-              if (drug.benefit < 50) {
-                drug.benefit = drug.benefit + 1;
-              }
-            }
-          }
-        }
-      }
-      if (drug.name != "Magic Pill") {
-        drug.expiresIn = drug.expiresIn - 1;
-      }
-      if (drug.expiresIn < 0) {
-        if (drug.name != "Herbal Tea") {
-          if (drug.name != "Fervex") {
-            if (drug.benefit > 0) {
-              if (drug.name != "Magic Pill") {
-                drug.benefit = drug.benefit - 1;
-              }
-            }
-          } else {
-            drug.benefit = drug.benefit - drug.benefit;
-          }
-        } else {
-          if (drug.benefit < 50) {
-            drug.benefit = drug.benefit + 1;
-          }
-        }
-      }
-    });
+    this.drugs = this.drugs.map(updateDrugEndOfDay);
 
     return this.drugs;
   }

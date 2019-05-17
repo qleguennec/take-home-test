@@ -33,5 +33,13 @@ describe("Pharmacy", () => {
         new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()[0].expiresIn
       ).toEqual(1);
     });
+
+    it("should side-effect deincrement the expiresIn and benefit", () => {
+      const pharmacy = new Pharmacy([new Drug("test", 2, 3)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(1);
+      expect(pharmacy.drugs[0].benefit).toBe(2);
+    });
   });
 });

@@ -9,7 +9,11 @@ const drugUpdateRules = {
     else if (expiresIn <= 5) return { expiresIn: -1, benefit: 3 };
     else if (expiresIn <= 10) return { expiresIn: -1, benefit: 2 };
     else return { expiresIn: -1, benefit: 1 };
-  }
+  },
+  Dafalgan: ({ expiresIn }) => ({
+    expiresIn: -1,
+    benefit: -(expiresIn > 0 ? 2 : 4)
+  })
 };
 
 const drugUpdateDefaultRule = ({ expiresIn }) => ({

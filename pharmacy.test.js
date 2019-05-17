@@ -12,6 +12,16 @@ describe("Pharmacy", () => {
         });
     });
 
+    it("should return an empty list when passed an empty list", () => {
+      expect(new Pharmacy([]).updateBenefitValue()).toEqual([]);
+    });
+
+    it("should return a list of length 1 when passed a list of length 1", () => {
+      expect(
+        new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()
+      ).toHaveLength(1);
+    });
+
     it("should decrement the benefit", () => {
       expect(
         new Pharmacy([new Drug("test", 2, 3)]).updateBenefitValue()[0].benefit

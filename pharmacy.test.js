@@ -117,13 +117,6 @@ describe("Pharmacy", () => {
         ).toEqual(1);
       });
 
-      it("should not increment the benefit to a value greater than 50", () => {
-        expect(
-          new Pharmacy([new Drug("Herbal Tea", 0, 50)]).updateBenefitValue()[0]
-            .benefit
-        ).toBeLessThanOrEqual(50);
-      });
-
       it("should increment the benefit when the expiresIn is greater than 10", () => {
         expect(
           new Pharmacy([new Drug("Fervex", 11, 5)]).updateBenefitValue()[0]
